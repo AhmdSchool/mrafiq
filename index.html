@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المرافق utilities</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root {
+    --bg: #f0f2f5;
+    --panel: #ffffff;
+    --text: #1a1f2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --input-bg: #f9fafb;
+    --input-border: #d1d5db;
+    --accent: #4a6cf7;
+    --accent-2: #8b5cf6;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-lg: 0 10px 40px rgba(74,108,247,0.15);
+    --water: #0ea5e9;
+    --electric: #f59e0b;
+    --gas: #ef4444;
+    --internet: #10b981;
+    --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+body.dark {
+    --bg: #0a0e17;
+    --panel: #131824;
+    --text: #e8ecf1;
+    --muted: #94a3b8;
+    --border: #1f2937;
+    --input-bg: #1a2030;
+    --input-border: #2d3748;
+    --shadow: 0 4px 20px rgba(0,0,0,0.5);
+    --shadow-lg: 0 10px 40px rgba(0,0,0,0.7);
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 15px;
+    transition: 0.3s;
+    min-height: 100vh;
+}
+
+/* ===== خلفية متحركة خفيفة ===== */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 20% 20%, rgba(74,108,247,0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(139,92,246,0.08) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+    animation: floatBg 20s infinite alternate;
+}
+@keyframes floatBg { from { transform: translate(0,0); } to { transform: translate(-3%, -3%); } }
+
+/* ===== الهيدر ===== */
+.top-bar {
+    max-width: 1100px;
+    margin: 0 auto 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+}
+.brand .brand-icon {
+    width: 46px; height: 46px;
+    border-radius: 14px;
+    background: var(--gradient-1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    box-shadow: var(--shadow-lg);
+    animation: pulseGlow 3s infinite;
+}
+@keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 10px 40px rgba(74,108,247,0.3); }
+    50% { box-shadow: 0 10px 50px rgba(139,92,246,0.5); }
+}
+.brand-text {
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.brand-sub {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    -webkit-text-fill-color: var(--muted);
+    letter-spacing: 1px;
+    display: block;
+    margin-top: -4px;
+}
+.top-actions { display: flex; gap: 8px; }
+.icon-btn {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+.icon-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent);
+}
+
+/* ===== التبويبات ===== */
+.tabs {
+    max-width: 1100px;
+    margin: 0 auto 20px;
+    display: flex;
+    gap: 6px;
+    background: var(--panel);
+    padding: 6px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+    position: relative;
+    z-index: 1;
+    scrollbar-width: thin;
+}
+.tabs::-webkit-scrollbar { height: 4px; }
+.tabs::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+.tab {
+    flex: 1;
+    min-width: 140px;
+    padding: 13px 18px;
+    text-align: center;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 14px;
+    transition: 0.3s;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    white-space: nowrap;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.tab:hover { color: var(--text); background: var(--input-bg); }
+.tab.active {
+    background: var(--gradient-1);
+    color: white;
+    box-shadow: var(--shadow-lg);
+    transform: scale(1.02);
+}
+
+/* ===== الأقسام ===== */
+.section { display: none; max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+.section.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+/* ===== Badges & Spans ===== */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+.badge-new {
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+    color: white;
+    animation: shine 2s infinite;
+    background-size: 200% 200%;
+}
+@keyframes shine {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.badge-pro {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1a1f2e;
+}
+.badge-free {
+    background: linear-gradient(135deg, #10b981, #34d399);
+    color: white;
+}
+.badge-version {
+    background: var(--input-bg);
+    color: var(--muted);
+    border: 1px solid var(--border);
+}
+.badge-sig {
+    background: linear-gradient(135deg, #4a6cf7, #8b5cf6);
+    color: white;
+    padding: 6px 14px;
+    font-size: 12px;
+    direction: ltr;
+}
+
+.highlight {
+    background: linear-gradient(135deg, rgba(74,108,247,0.15), rgba(139,92,246,0.15));
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 800;
+    color: var(--accent);
+}
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+}
+.kbd {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-bottom-width: 2px;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+}
+.stat-highlight {
+    font-size: 15px;
+    font-weight: 900;
+    background: var(--gradient-3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.gradient-text {
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+}
+
+/* ===== لوحة الإدخال ===== */
+.input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+}
+.utility-card {
+    background: var(--panel);
+    border-radius: 18px;
+    padding: 18px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    border-right: 5px solid var(--accent);
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+.utility-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gradient-1);
+    opacity: 0;
+    transition: 0.3s;
+}
+.utility-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.utility-card:hover::before { opacity: 1; }
+.utility-card.water { border-right-color: var(--water); }
+.utility-card.water::before { background: linear-gradient(90deg, var(--water), #38bdf8); }
+.utility-card.electric { border-right-color: var(--electric); }
+.utility-card.electric::before { background: linear-gradient(90deg, var(--electric), #fbbf24); }
+.utility-card.gas { border-right-color: var(--gas); }
+.utility-card.gas::before { background: linear-gradient(90deg, var(--gas), #f87171); }
+.utility-card.internet { border-right-color: var(--internet); }
+.utility-card.internet::before { background: linear-gradient(90deg, var(--internet), #34d399); }
+
+.utility-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--border);
+}
+.utility-title { font-weight: 900; font-size: 17px; display: flex; align-items: center; gap: 8px; }
+.utility-emoji {
+    font-size: 24px;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
+}
+
+.field-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.field-row label { font-size: 13px; color: var(--muted); font-weight: 700; }
+.field-row input {
+    width: 110px;
+    padding: 10px 12px;
+    border: 2px solid var(--input-border);
+    border-radius: 10px;
+    background: var(--input-bg);
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 800;
+    text-align: center;
+    direction: ltr;
+    outline: none;
+    transition: 0.2s;
+}
+.field-row input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(74,108,247,0.15);
+    transform: scale(1.02);
+}
+
+/* ===== التقويم ===== */
+.calendar-bar {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: var(--panel);
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    align-items: center;
+}
+.calendar-bar label { font-weight: 800; display: flex; align-items: center; gap: 6px; }
+.calendar-bar select, .calendar-bar input {
+    padding: 11px 16px;
+    border-radius: 10px;
+    border: 2px solid var(--input-border);
+    background: var(--input-bg);
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    outline: none;
+    transition: 0.2s;
+}
+.calendar-bar select:focus, .calendar-bar input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(74,108,247,0.15);
+}
+.calendar-bar button {
+    padding: 11px 22px;
+    border-radius: 10px;
+    border: none;
+    background: var(--gradient-1);
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 14px;
+}
+.calendar-bar button:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+/* ===== Timeline ===== */
+.timeline-wrap {
+    position: relative;
+    padding-right: 34px;
+}
+.timeline-wrap::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; right: 12px;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--water), var(--electric), var(--gas), var(--internet));
+    border-radius: 4px;
+    opacity: 0.6;
+}
+.month-card {
+    background: var(--panel);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    position: relative;
+    transition: 0.3s;
+}
+.month-card::before {
+    content: '';
+    position: absolute;
+    right: -28px; top: 26px;
+    width: 16px; height: 16px;
+    background: var(--gradient-1);
+    border-radius: 50%;
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 4px rgba(74,108,247,0.25);
+    animation: dotPulse 2s infinite;
+}
+@keyframes dotPulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(74,108,247,0.25); }
+    50% { box-shadow: 0 0 0 8px rgba(74,108,247,0.1); }
+}
+.month-card:hover { transform: translateX(-6px); box-shadow: var(--shadow-lg); }
+
+.month-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.month-title { font-size: 19px; font-weight: 900; display: flex; align-items: center; gap: 8px; }
+.month-total {
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 900;
+    font-size: 14px;
+    box-shadow: 0 4px 14px rgba(239,68,68,0.3);
+}
+
+.util-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+.util-mini {
+    background: var(--input-bg);
+    border-radius: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-right: 4px solid var(--accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.2s;
+}
+.util-mini:hover { transform: translateX(-3px); }
+.util-mini.water { border-right-color: var(--water); }
+.util-mini.electric { border-right-color: var(--electric); }
+.util-mini.gas { border-right-color: var(--gas); }
+.util-mini.internet { border-right-color: var(--internet); }
+.util-mini .name { font-size: 13px; font-weight: 800; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.util-mini .val { font-size: 17px; font-weight: 900; direction: ltr; }
+.util-mini .val small { font-size: 11px; color: var(--muted); font-weight: 700; margin-right: 3px; }
+
+.month-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+.mini-btn {
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.2s;
+    background: var(--input-bg);
+    color: var(--text);
+    display: flex; align-items: center; gap: 4px;
+}
+.mini-btn:hover { background: var(--accent); color: white; border-color: var(--accent); transform: translateY(-2px); }
+.mini-btn.danger:hover { background: var(--gas); border-color: var(--gas); }
+
+/* ===== الإحصائيات ===== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+}
+.stat-card {
+    background: var(--panel);
+    padding: 20px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    border-top: 5px solid var(--accent);
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: -30px; left: -30px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(74,108,247,0.15), transparent);
+}
+.stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.stat-card.water { border-top-color: var(--water); }
+.stat-card.electric { border-top-color: var(--electric); }
+.stat-card.gas { border-top-color: var(--gas); }
+.stat-card.internet { border-top-color: var(--internet); }
+.stat-title { font-size: 13px; color: var(--muted); font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.stat-value { font-size: 26px; font-weight: 900; direction: ltr; letter-spacing: -0.5px; }
+.stat-sub { font-size: 12px; color: var(--muted); margin-top: 6px; font-weight: 600; }
+.stat-sub b { color: var(--text); }
+
+/* ===== تبويب حول التطبيق ===== */
+.about-hero {
+    background: var(--gradient-1);
+    border-radius: 24px;
+    padding: 40px 24px;
+    text-align: center;
+    color: white;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 50%);
+    animation: rotate 20s linear infinite;
+}
+@keyframes rotate { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+.about-hero h1 {
+    margin: 0 0 12px;
+    font-size: 34px;
+    font-weight: 900;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.about-hero p {
+    margin: 0;
+    opacity: 0.95;
+    font-size: 15px;
+    position: relative;
+    z-index: 1;
+    font-weight: 600;
+}
+.about-hero .hero-badges {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+.about-hero .hero-badges .badge {
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 6px 14px;
+    font-size: 12px;
+}
+
+.download-card {
+    background: var(--panel);
+    border-radius: 20px;
+    padding: 24px;
+    border: 2px dashed var(--accent);
+    text-align: center;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+.download-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(74,108,247,0.05), rgba(139,92,246,0.05));
+    pointer-events: none;
+}
+.download-card h2 {
+    margin: 0 0 10px;
+    font-size: 22px;
+    position: relative;
+}
+.download-card p {
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 18px;
+    position: relative;
+}
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 36px;
+    background: var(--gradient-1);
+    color: white;
+    font-weight: 900;
+    font-size: 17px;
+    border-radius: 14px;
+    text-decoration: none;
+    box-shadow: var(--shadow-lg);
+    transition: 0.3s;
+    position: relative;
+    border: none;
+    cursor: pointer;
+}
+.download-btn:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 15px 50px rgba(74,108,247,0.4); }
+.download-btn .arrow { animation: bounce 1.5s infinite; }
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+}
+.feature-card {
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+.feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+.feature-icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    margin-bottom: 12px;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+}
+.feature-card h3 { margin: 0 0 8px; font-size: 16px; font-weight: 900; }
+.feature-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; font-weight: 600; }
+
+.usage-steps {
+    background: var(--panel);
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+}
+.usage-steps h2 { margin: 0 0 18px; font-size: 20px; display: flex; align-items: center; gap: 8px; }
+.step {
+    display: flex;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 12px;
+    background: var(--input-bg);
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    transition: 0.2s;
+}
+.step:hover { transform: translateX(-4px); border-color: var(--accent); }
+.step-num {
+    width: 36px; height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    background: var(--gradient-1);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900;
+    font-size: 15px;
+    box-shadow: 0 4px 14px rgba(74,108,247,0.3);
+}
+.step-content h4 { margin: 0 0 4px; font-size: 15px; font-weight: 900; }
+.step-content p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; font-weight: 600; }
+
+.footer-bar {
+    max-width: 1100px;
+    margin: 30px auto 0;
+    text-align: center;
+    padding: 24px 16px;
+    color: var(--muted);
+    font-weight: 700;
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+}
+.footer-bar .sig {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 8px 18px;
+    border-radius: 24px;
+    background: var(--gradient-1);
+    color: white;
+    font-weight: 900;
+    font-size: 14px;
+    direction: ltr;
+    box-shadow: var(--shadow-lg);
+}
+.footer-bar .sig a { color: white; text-decoration: none; }
+.footer-bar .copyright {
+    font-size: 12px;
+    margin-top: 10px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+/* ===== أزرار الإجراءات ===== */
+.action-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px auto;
+    max-width: 1100px;
+}
+.action-btn {
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 800;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    transition: 0.3s;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: var(--shadow);
+}
+.action-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.btn-save { background: linear-gradient(135deg, #10b981, #059669); }
+.btn-img { background: var(--gradient-1); }
+.btn-export { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.btn-import { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.btn-clear { background: linear-gradient(135deg, #6b7280, #4b5563); }
+.btn-download { background: var(--gradient-2); }
+
+/* ===== Modal ===== */
+.modal {
+    display: none;
+    position: fixed; z-index: 3000;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    padding: 20px;
+    overflow-y: auto;
+}
+.modal.show { display: flex; align-items: flex-start; justify-content: center; padding-top: 40px; }
+.modal-box {
+    background: var(--panel);
+    border-radius: 20px;
+    padding: 22px;
+    max-width: 460px;
+    width: 100%;
+    position: relative;
+    animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+@keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-box h3 { margin: 0 0 14px; text-align: center; font-size: 18px; }
+.modal-box img { width: 100%; border-radius: 12px; border: 1px solid var(--border); }
+.close-x {
+    position: absolute; top: 12px; left: 16px;
+    font-size: 28px; cursor: pointer; color: var(--muted); font-weight: 800;
+    background: none; border: none;
+    transition: 0.2s;
+    line-height: 1;
+}
+.close-x:hover { color: var(--gas); transform: rotate(90deg); }
+
+/* ===== Toast ===== */
+.toast {
+    position: fixed;
+    bottom: 30px; left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(16,185,129,0.4);
+    transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 4000;
+    opacity: 0;
+    max-width: 90vw;
+    text-align: center;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 10px 40px rgba(239,68,68,0.4); }
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    background: var(--panel);
+    border-radius: 20px;
+    border: 2px dashed var(--border);
+}
+.empty-state .icon { font-size: 64px; margin-bottom: 12px; animation: float 3s infinite; }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.empty-state h3 { margin: 0 0 8px; color: var(--text); font-size: 18px; }
+.empty-state p { margin: 0; font-weight: 600; }
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .brand { font-size: 19px; }
+    .brand .brand-icon { width: 40px; height: 40px; font-size: 20px; }
+    .tab { font-size: 12px; min-width: 110px; padding: 11px 12px; }
+    .timeline-wrap { padding-right: 22px; }
+    .timeline-wrap::before { right: 7px; }
+    .month-card::before { right: -22px; width: 13px; height: 13px; }
+    .about-hero h1 { font-size: 26px; }
+    .download-btn { padding: 14px 24px; font-size: 15px; }
+    .action-btn { padding: 10px 14px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== الهيدر ===== -->
+<div class="top-bar">
+    <div class="brand">
+        <div class="brand-icon">🏠</div>
+        <div>
+            <span class="brand-text">المرافق utilities</span>
+            <span class="brand-sub">AHMD@GMX.LI</span>
+        </div>
+    </div>
+    <div class="top-actions">
+        <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="الوضع الليلي">🌙</button>
+        <button class="icon-btn" onclick="exportJSON()" title="تصدير JSON">📤</button>
+        <button class="icon-btn" onclick="document.getElementById('importFile').click()" title="استيراد JSON">📥</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+    </div>
+</div>
+
+<!-- ===== التبويبات ===== -->
+<div class="tabs">
+    <button class="tab active" onclick="switchTab('entry', this)">📝 الإدخال</button>
+    <button class="tab" onclick="switchTab('timeline', this)">📊 الإنفوجرافيك</button>
+    <button class="tab" onclick="switchTab('stats', this)">📈 الإحصائيات</button>
+    <button class="tab" onclick="switchTab('about', this)">ℹ️ حول التطبيق</button>
+</div>
+
+<!-- ===== قسم الإدخال ===== -->
+<div class="section active" id="section-entry">
+    <div class="input-grid">
+        <div class="utility-card water">
+            <div class="utility-head">
+                <div class="utility-title"><span class="utility-emoji">💧</span> المياه</div>
+                <span class="badge badge-version" id="entry-current-month">--</span>
+            </div>
+            <div id="fields-water"></div>
+        </div>
+        <div class="utility-card electric">
+            <div class="utility-head">
+                <div class="utility-title"><span class="utility-emoji">⚡</span> الكهرباء</div>
+                <span class="badge badge-new">مباشر</span>
+            </div>
+            <div id="fields-electric"></div>
+        </div>
+        <div class="utility-card gas">
+            <div class="utility-head">
+                <div class="utility-title"><span class="utility-emoji">🔥</span> الغاز</div>
+            </div>
+            <div id="fields-gas"></div>
+        </div>
+        <div class="utility-card internet">
+            <div class="utility-head">
+                <div class="utility-title"><span class="utility-emoji">🌐</span> الإنترنت</div>
+            </div>
+            <div id="fields-internet"></div>
+        </div>
+    </div>
+    <div class="action-bar">
+        <button class="action-btn btn-save" onclick="saveCurrentMonth()">💾 حفظ بيانات الشهر</button>
+        <button class="action-btn btn-img" onclick="shareCurrentText()">📱 مشاركة الشهر</button>
+    </div>
+</div>
+
+<!-- ===== قسم Timeline ===== -->
+<div class="section" id="section-timeline">
+    <div class="calendar-bar">
+        <label>🔍 ابحث:</label>
+        <select id="searchMonth"></select>
+        <select id="searchYear"></select>
+        <button onclick="jumpToMonth()">⏩ قفز سريع</button>
+        <button onclick="scrollToTopTimeline()" style="background:linear-gradient(135deg,#6b7280,#4b5563);">⬆️ الأعلى</button>
+    </div>
+
+    <div class="action-bar">
+        <button class="action-btn btn-save" onclick="shareAllText()">📱 مشاركة الكل</button>
+        <button class="action-btn btn-img" onclick="shareTimelineImage()">📸 صورة الإنفوجرافيك</button>
+        <button class="action-btn btn-export" onclick="exportJSON()">📤 تصدير JSON</button>
+        <button class="action-btn btn-clear" onclick="clearAll()">🗑️ مسح الكل</button>
+    </div>
+
+    <div class="timeline-wrap" id="timelineWrap"></div>
+</div>
+
+<!-- ===== قسم الإحصائيات ===== -->
+<div class="section" id="section-stats">
+    <div class="stats-grid" id="statsGrid"></div>
+</div>
+
+<!-- ===== قسم حول التطبيق ===== -->
+<div class="section" id="section-about">
+
+    <div class="about-hero">
+        <h1>🏠 المرافق utilities</h1>
+        <p>تطبيق ذكي لإدارة فواتير المرافق الشهرية (مياه، كهرباء، غاز، إنترنت)</p>
+        <div class="hero-badges">
+            <span class="badge">✨ v2.0</span>
+            <span class="badge">🔒 يعمل أوفلاين 100%</span>
+            <span class="badge">🇪🇬 بالعربية</span>
+            <span class="badge">📱 متجاوب مع الجوال</span>
+        </div>
+    </div>
+
+    <div class="download-card">
+        <h2>⬇️ حمّل التطبيق مباشرة</h2>
+        <p>احصل على نسختك من التطبيق من خلال الرابط الرسمي</p>
+        <a href="https://drive.google.com/drive/folders/1cIBohelTUlv2hMgGz2popx8vv7pFZwCo?usp=sharing"
+           target="_blank"
+           rel="noopener"
+           class="download-btn">
+            📥 تحميل من Google Drive
+            <span class="arrow">⬇️</span>
+        </a>
+        <p style="margin-top:16px;font-size:12px;">
+            <span class="chip">💡 يعمل بدون إنترنت بعد التحميل</span>
+            <span class="chip">📦 حجم صغير</span>
+            <span class="chip">🆓 مجاني</span>
+        </p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon" style="background:linear-gradient(135deg,rgba(14,165,233,0.15),rgba(56,189,248,0.15));">💧</div>
+            <h3>إدارة المياه</h3>
+            <p>سجّل استهلاك المياه وفاتورتها الشهرية بدقة، مع إمكانية متابعة التطور.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(251,191,36,0.15));">⚡</div>
+            <h3>إدارة الكهرباء</h3>
+            <p>تابع استهلاك الكهرباء الشهري واكتشف أعلى الشهور تكلفة بضغطة واحدة.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:linear-gradient(135deg,rgba(239,68,68,0.15),rgba(248,113,113,0.15));">🔥</div>
+            <h3>إدارة الغاز</h3>
+            <p>سجل استهلاك الغاز ومقارنة الفواتير الشهرية بسهولة ويسر.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(52,211,153,0.15));">🌐</div>
+            <h3>إدارة الإنترنت</h3>
+            <p>تابع باقات الإنترنت واشتراكاتك الشهرية مع تفاصيل كل شهر.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:linear-gradient(135deg,rgba(74,108,247,0.15),rgba(139,92,246,0.15));">📊</div>
+            <h3>إنفوجرافيك Timeline</h3>
+            <p>عرض بصري رائع لكل الشهور مرتبة من الأحدث إلى الأقدم حتى عام 2000.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:linear-gradient(135deg,rgba(251,191,36,0.15),rgba(245,158,11,0.15));">📈</div>
+            <h3>إحصائيات ذكية</h3>
+            <p>إجمالي الفواتير، المتوسط، أعلى شهر، وإجمالي الاستهلاك لكل مرفق.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(5,150,105,0.15));">💾</div>
+            <h3>استيراد وتصدير JSON</h3>
+            <p>احتفظ بنسخة احتياطية كاملة من بياناتك أو انقلها لجهاز آخر بسهولة.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:linear-gradient(135deg,rgba(37,211,102,0.15),rgba(18,140,126,0.15));">📱</div>
+            <h3>مشاركة واتساب</h3>
+            <p>شارك تقريرك الشهري كنص أو كصورة عبر واتساب بضغطة واحدة.</p>
+        </div>
+    </div>
+
+    <div class="usage-steps">
+        <h2>🚀 كيف تستخدم التطبيق؟</h2>
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+                <h4>افتح تبويب "الإدخال"</h4>
+                <p>ستجد 4 بطاقات: المياه 💧، الكهرباء ⚡، الغاز 🔥، الإنترنت 🌐. أدخل قيمة <span class="highlight">الاستهلاك</span> و<span class="highlight">الفاتورة</span> لكل مرفق.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+                <h4>اضغط "حفظ بيانات الشهر"</h4>
+                <p>سيتم حفظ البيانات تلقائياً للشهر الحالي في التخزين المحلي (LocalStorage).</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+                <h4>استعرض تبويب "الإنفوجرافيك"</h4>
+                <p>شاهد كل الشهور المسجلة في خط زمني أنيق، مع البحث السريع بأي شهر/سنة.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+                <h4>شارك أو صدّر بياناتك</h4>
+                <p>استخدم أزرار المشاركة إلى واتساب، أو صدّر البيانات بصيغة <span class="kbd">JSON</span> كنسخة احتياطية.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+                <h4>استورد نسخة احتياطية</h4>
+                <p>من زر 📥 في الأعلى، اختر ملف <span class="kbd">.json</span> لاستعادة بياناتك على أي جهاز.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="usage-steps">
+        <h2>💡 نصائح وحيل احترافية</h2>
+        <div class="step">
+            <div class="step-num">💡</div>
+            <div class="step-content">
+                <h4>وضع ليلي مريح للعين</h4>
+                <p>اضغط على 🌙/☀️ أعلى يسار الشاشة للتبديل بين الوضع الليلي والنهاري.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">💡</div>
+            <div class="step-content">
+                <h4>النسخ الاحتياطي المنتظم</h4>
+                <p>صدّر بياناتك بصيغة JSON كل شهر لضمان عدم فقدانها.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">💡</div>
+            <div class="step-content">
+                <h4>مشاركة سريعة للعائلة</h4>
+                <p>استخدم زر 📸 لتصدير الإنفوجرافيك كصورة ومشاركتها مع أفراد الأسرة.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">💡</div>
+            <div class="step-content">
+                <h4>يعمل بدون إنترنت</h4>
+                <p>بعد تحميل التطبيق مرة واحدة، يمكنك استخدامه في أي مكان بدون اتصال.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== الفوتر ===== -->
+<div class="footer-bar">
+    <div>🏠 المرافق utilities — إدارة ذكية لفواتيرك الشهرية</div>
+    <div class="sig">
+        ✍️ التوقيع: <a href="mailto:ahmd@gmx.li">ahmd@gmx.li</a>
+    </div>
+    <div class="copyright">
+        © <span id="year"></span> جميع الحقوق محفوظة — <b>ahmd@gmx.li</b>
+    </div>
+</div>
+
+<!-- ===== Modal ===== -->
+<div class="modal" id="imageModal">
+    <div class="modal-box">
+        <button class="close-x" onclick="closeModal()">&times;</button>
+        <h3>📸 الصورة جاهزة</h3>
+        <img id="modalImage" src="" alt="التقرير">
+        <p style="font-size:13px;color:var(--muted);text-align:center;">اضغط مطولاً على الصورة لحفظها في الجهاز</p>
+        <button class="action-btn btn-save" style="width:100%;justify-content:center;margin-top:10px;" onclick="downloadImage()">📥 حفظ الصورة</button>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   البيانات الأساسية
+============================================================ */
+const UTILITIES = [
+    { id: 'water',    name: 'المياه',    emoji: '💧', unit: 'م³', color: 'water',    fields: ['الاستهلاك','الفاتورة'] },
+    { id: 'electric', name: 'الكهرباء',  emoji: '⚡', unit: 'ك.و', color: 'electric', fields: ['الاستهلاك','الفاتورة'] },
+    { id: 'gas',      name: 'الغاز',     emoji: '🔥', unit: 'م³', color: 'gas',      fields: ['الاستهلاك','الفاتورة'] },
+    { id: 'internet', name: 'الإنترنت',  emoji: '🌐', unit: 'ج.ب', color: 'internet', fields: ['الاستهلاك','الفاتورة'] }
+];
+
+const MONTHS_AR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const APP_SIGNATURE = 'ahmd@gmx.li';
+
+let DB = {};
+
+function loadDB() {
+    try {
+        const raw = localStorage.getItem('utilities_db_v1');
+        DB = raw ? JSON.parse(raw) : {};
+    } catch(e) { DB = {}; }
+}
+function saveDB() { localStorage.setItem('utilities_db_v1', JSON.stringify(DB)); }
+
+/* ============================================================
+   بناء واجهة الإدخال
+============================================================ */
+function buildEntryUI() {
+    UTILITIES.forEach(u => {
+        const container = document.getElementById('fields-' + u.id);
+        container.innerHTML = '';
+        u.fields.forEach(field => {
+            const row = document.createElement('div');
+            row.className = 'field-row';
+            row.innerHTML = `
+                <label>${field} (${u.unit})</label>
+                <input type="number" id="inp-${u.id}-${field}" value="0" placeholder="0">
+            `;
+            container.appendChild(row);
+        });
+    });
+}
+
+function getCurrentYM() {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+}
+
+function refreshEntryMonthBadge() {
+    const ym = getCurrentYM();
+    const [y, m] = ym.split('-');
+    document.getElementById('entry-current-month').innerText = `${MONTHS_AR[parseInt(m)-1]} ${y}`;
+}
+
+function loadEntryFromDB() {
+    const ym = getCurrentYM();
+    const data = DB[ym];
+    if (data) {
+        UTILITIES.forEach(u => {
+            u.fields.forEach(field => {
+                const el = document.getElementById(`inp-${u.id}-${field}`);
+                if (el) el.value = data[u.id]?.[field] ?? 0;
+            });
+        });
+    }
+}
+
+function saveCurrentMonth() {
+    const ym = getCurrentYM();
+    const entry = {};
+    UTILITIES.forEach(u => {
+        entry[u.id] = {};
+        u.fields.forEach(field => {
+            const el = document.getElementById(`inp-${u.id}-${field}`);
+            entry[u.id][field] = parseFloat(el.value) || 0;
+        });
+    });
+    DB[ym] = entry;
+    saveDB();
+    showToast(`✅ تم حفظ بيانات ${document.getElementById('entry-current-month').innerText}`);
+    renderTimeline();
+    renderStats();
+    buildSearchSelects();
+}
+
+/* ============================================================
+   Timeline
+============================================================ */
+function renderTimeline() {
+    const wrap = document.getElementById('timelineWrap');
+    const keys = Object.keys(DB).sort().reverse();
+
+    if (keys.length === 0) {
+        wrap.innerHTML = `
+            <div class="empty-state">
+                <div class="icon">📭</div>
+                <h3>لا توجد بيانات بعد</h3>
+                <p>ابدأ بإدخال بيانات الشهر الحالي من تبويب "الإدخال"</p>
+            </div>`;
+        return;
+    }
+
+    wrap.innerHTML = keys.map(ym => {
+        const [y, m] = ym.split('-');
+        const monthName = MONTHS_AR[parseInt(m)-1];
+        const data = DB[ym];
+        let total = 0;
+        UTILITIES.forEach(u => { total += parseFloat(data[u.id]?.['الفاتورة']) || 0; });
+
+        const utilsHTML = UTILITIES.map(u => {
+            const consumption = data[u.id]?.['الاستهلاك'] ?? 0;
+            const bill = data[u.id]?.['الفاتورة'] ?? 0;
+            return `
+                <div class="util-mini ${u.color}">
+                    <span class="name">${u.emoji} ${u.name}</span>
+                    <span class="val">${bill} <small>ج.م</small></span>
+                </div>
+                <div class="util-mini ${u.color}" style="margin-top:-6px;">
+                    <span class="name" style="font-size:11px;">&nbsp;&nbsp;&nbsp;↳ استهلاك</span>
+                    <span class="val" style="font-size:14px;">${consumption} <small>${u.unit}</small></span>
+                </div>
+            `;
+        }).join('');
+
+        return `
+            <div class="month-card" data-ym="${ym}">
+                <div class="month-header">
+                    <div class="month-title">📅 ${monthName} ${y}</div>
+                    <div class="month-total">الإجمالي: ${total.toLocaleString()} ج.م</div>
+                </div>
+                <div class="util-mini-grid">${utilsHTML}</div>
+                <div class="month-actions">
+                    <button class="mini-btn" onclick="shareMonthText('${ym}')">📱 مشاركة</button>
+                    <button class="mini-btn" onclick="loadMonthToEntry('${ym}')">✏️ تعديل</button>
+                    <button class="mini-btn danger" onclick="deleteMonth('${ym}')">🗑️ حذف</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+/* ============================================================
+   البحث السريع
+============================================================ */
+function buildSearchSelects() {
+    const mSel = document.getElementById('searchMonth');
+    const ySel = document.getElementById('searchYear');
+
+    mSel.innerHTML = MONTHS_AR.map((m, i) =>
+        `<option value="${i+1}">${m}</option>`).join('');
+
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    let yearsHTML = '';
+    for (let y = currentYear; y >= 2000; y--) {
+        yearsHTML += `<option value="${y}">${y}</option>`;
+    }
+    ySel.innerHTML = yearsHTML;
+
+    mSel.value = now.getMonth() + 1;
+    ySel.value = currentYear;
+}
+
+function jumpToMonth() {
+    const m = document.getElementById('searchMonth').value;
+    const y = document.getElementById('searchYear').value;
+    const ym = `${y}-${String(m).padStart(2,'0')}`;
+    const card = document.querySelector(`.month-card[data-ym="${ym}"]`);
+    if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.style.transition = '0.5s';
+        card.style.background = 'linear-gradient(135deg, rgba(74,108,247,0.15), transparent)';
+        setTimeout(() => { card.style.background = ''; }, 1500);
+    } else {
+        showToast(`⚠️ لا توجد بيانات لشهر ${MONTHS_AR[parseInt(m)-1]} ${y}`, 'error');
+    }
+}
+
+function scrollToTopTimeline() {
+    document.getElementById('timelineWrap').scrollIntoView({ behavior: 'smooth' });
+}
+
+/* ============================================================
+   تحميل / حذف / مشاركة
+============================================================ */
+function loadMonthToEntry(ym) {
+    const [y, m] = ym.split('-');
+    const now = new Date();
+    if (now.getFullYear() != y || (now.getMonth()+1) != parseInt(m)) {
+        if (!confirm(`⚠️ تنبيه: الإدخال مخصص للشهر الحالي.\n\nهل تريد نسخ بيانات ${MONTHS_AR[parseInt(m)-1]} ${y} إلى حقول الإدخال؟`)) return;
+    }
+    const data = DB[ym];
+    UTILITIES.forEach(u => {
+        u.fields.forEach(field => {
+            const el = document.getElementById(`inp-${u.id}-${field}`);
+            if (el) el.value = data[u.id]?.[field] ?? 0;
+        });
+    });
+    switchTab('entry', document.querySelectorAll('.tab')[0]);
+    showToast('✏️ تم تحميل البيانات للإدخال');
+}
+
+function deleteMonth(ym) {
+    const [y, m] = ym.split('-');
+    if (!confirm(`🗑️ هل تريد حذف بيانات ${MONTHS_AR[parseInt(m)-1]} ${y}؟`)) return;
+    delete DB[ym];
+    saveDB();
+    renderTimeline();
+    renderStats();
+    showToast('🗑️ تم الحذف');
+}
+
+function shareMonthText(ym) {
+    const text = generateMonthText(ym);
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+function generateMonthText(ym) {
+    const [y, m] = ym.split('-');
+    const data = DB[ym];
+    let text = `*🏠 المرافق utilities*\n`;
+    text += `*تقرير ${MONTHS_AR[parseInt(m)-1]} ${y}*\n`;
+    text += `━━━━━━━━━━━━━━━━━\n`;
+    let total = 0;
+    UTILITIES.forEach(u => {
+        const c = data[u.id]?.['الاستهلاك'] ?? 0;
+        const b = data[u.id]?.['الفاتورة'] ?? 0;
+        text += `${u.emoji} *${u.name}*\n`;
+        text += `   • الاستهلاك: ${c} ${u.unit}\n`;
+        text += `   • الفاتورة: ${b} ج.م\n`;
+        total += parseFloat(b) || 0;
+    });
+    text += `━━━━━━━━━━━━━━━━━\n`;
+    text += `💰 *الإجمالي: ${total.toLocaleString()} ج.م*\n`;
+    text += `✍️ ${APP_SIGNATURE}`;
+    return text;
+}
+
+function shareAllText() {
+    const keys = Object.keys(DB).sort().reverse();
+    if (keys.length === 0) { showToast('⚠️ لا توجد بيانات', 'error'); return; }
+    let text = `*🏠 المرافق utilities*\n`;
+    text += `*📊 تقرير شامل*\n`;
+    text += `🗓️ عدد الأشهر: ${keys.length}\n`;
+    text += `━━━━━━━━━━━━━━━━━\n\n`;
+    keys.forEach(ym => {
+        const [y, m] = ym.split('-');
+        const data = DB[ym];
+        let total = 0;
+        UTILITIES.forEach(u => { total += parseFloat(data[u.id]?.['الفاتورة']) || 0; });
+        text += `*📅 ${MONTHS_AR[parseInt(m)-1]} ${y}* — الإجمالي: ${total.toLocaleString()} ج.م\n`;
+        UTILITIES.forEach(u => {
+            text += `  ${u.emoji} ${u.name}: ${data[u.id]?.['الفاتورة'] ?? 0} ج.م\n`;
+        });
+        text += `\n`;
+    });
+    text += `━━━━━━━━━━━━━━━━━\n✍️ ${APP_SIGNATURE}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+function shareCurrentText() {
+    const ym = getCurrentYM();
+    const [y, m] = ym.split('-');
+    let text = `*🏠 المرافق utilities*\n`;
+    text += `*تقرير ${MONTHS_AR[parseInt(m)-1]} ${y}*\n`;
+    text += `━━━━━━━━━━━━━━━━━\n`;
+    let total = 0;
+    UTILITIES.forEach(u => {
+        const c = parseFloat(document.getElementById(`inp-${u.id}-الاستهلاك`)?.value) || 0;
+        const b = parseFloat(document.getElementById(`inp-${u.id}-الفاتورة`)?.value) || 0;
+        text += `${u.emoji} *${u.name}*\n`;
+        text += `   • الاستهلاك: ${c} ${u.unit}\n`;
+        text += `   • الفاتورة: ${b} ج.م\n`;
+        total += b;
+    });
+    text += `━━━━━━━━━━━━━━━━━\n`;
+    text += `💰 *الإجمالي: ${total.toLocaleString()} ج.م*\n`;
+    text += `✍️ ${APP_SIGNATURE}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+/* ============================================================
+   الإحصائيات
+============================================================ */
+function renderStats() {
+    const grid = document.getElementById('statsGrid');
+    const keys = Object.keys(DB).sort();
+
+    if (keys.length === 0) {
+        grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
+            <div class="icon">📈</div><h3>لا توجد إحصائيات بعد</h3>
+            <p>ابدأ بإدخال بياناتك لعرض الإحصائيات</p>
+        </div>`;
+        return;
+    }
+
+    const stats = {};
+    UTILITIES.forEach(u => {
+        stats[u.id] = { totalBill: 0, totalCons: 0, max: { bill: 0, month: '' }, count: 0 };
+    });
+
+    keys.forEach(ym => {
+        const data = DB[ym];
+        UTILITIES.forEach(u => {
+            const bill = parseFloat(data[u.id]?.['الفاتورة']) || 0;
+            const cons = parseFloat(data[u.id]?.['الاستهلاك']) || 0;
+            stats[u.id].totalBill += bill;
+            stats[u.id].totalCons += cons;
+            stats[u.id].count++;
+            if (bill > stats[u.id].max.bill) {
+                stats[u.id].max.bill = bill;
+                const [y, m] = ym.split('-');
+                stats[u.id].max.month = `${MONTHS_AR[parseInt(m)-1]} ${y}`;
+            }
+        });
+    });
+
+    grid.innerHTML = UTILITIES.map(u => {
+        const s = stats[u.id];
+        const avg = s.count ? (s.totalBill / s.count).toFixed(0) : 0;
+        return `
+            <div class="stat-card ${u.color}">
+                <div class="stat-title">${u.emoji} ${u.name}</div>
+                <div class="stat-value">${s.totalBill.toLocaleString()} <small style="font-size:13px;">ج.م</small></div>
+                <div class="stat-sub">📊 إجمالي الفواتير</div>
+                <div class="stat-sub" style="margin-top:8px;">⚖️ المتوسط: <span class="stat-highlight">${avg} ج.م</span></div>
+                <div class="stat-sub">🏆 أعلى شهر: <b>${s.max.month || '-'} (${s.max.bill})</b></div>
+                <div class="stat-sub">💧 إجمالي الاستهلاك: <b>${s.totalCons.toLocaleString()} ${u.unit}</b></div>
+            </div>
+        `;
+    }).join('');
+}
+
+/* ============================================================
+   الصور
+============================================================ */
+let generatedImage = null;
+
+function shareTimelineImage() {
+    const wrap = document.getElementById('timelineWrap');
+    if (Object.keys(DB).length === 0) { showToast('⚠️ لا توجد بيانات', 'error'); return; }
+
+    const modal = document.getElementById('imageModal');
+    const img = document.getElementById('modalImage');
+    img.src = 'https://i.gifer.com/ZZ5H.gif';
+    modal.classList.add('show');
+
+    html2canvas(wrap, {
+        scale: 2,
+        backgroundColor: document.body.classList.contains('dark') ? '#131824' : '#ffffff',
+        useCORS: true
+    }).then(canvas => {
+        generatedImage = canvas.toDataURL('image/png');
+        img.src = generatedImage;
+    }).catch(e => {
+        console.error(e);
+        showToast('حدث خطأ في إنشاء الصورة', 'error');
+        closeModal();
+    });
+}
+
+function downloadImage() {
+    if (!generatedImage) return;
+    const a = document.createElement('a');
+    a.download = `المرافق_utilities_${new Date().toISOString().slice(0,10)}.png`;
+    a.href = generatedImage;
+    a.click();
+}
+
+function closeModal() {
+    document.getElementById('imageModal').classList.remove('show');
+}
+
+/* ============================================================
+   JSON
+============================================================ */
+function exportJSON() {
+    if (Object.keys(DB).length === 0) { showToast('⚠️ لا توجد بيانات للتصدير', 'error'); return; }
+    const exportData = {
+        app: 'المرافق utilities',
+        signature: APP_SIGNATURE,
+        exportedAt: new Date().toISOString(),
+        version: '2.0',
+        data: DB
+    };
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `utilities_backup_${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('📤 تم تصدير البيانات بنجاح');
+}
+
+function importJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            let imported = JSON.parse(e.target.result);
+            // دعم البنية الجديدة والقديمة
+            if (imported.data && typeof imported.data === 'object') {
+                imported = imported.data;
+            }
+            if (typeof imported !== 'object' || Array.isArray(imported)) throw new Error('صيغة غير صحيحة');
+            if (!confirm(`📥 سيتم دمج ${Object.keys(imported).length} شهر مع البيانات الحالية.\n\nاختر "موافق" للدمج، أو "إلغاء" للاستبدال الكامل.`)) {
+                if (!confirm('⚠️ تأكيد: سيتم استبدال كل البيانات الحالية بالبيانات المستوردة.')) {
+                    event.target.value = '';
+                    return;
+                }
+                DB = imported;
+            } else {
+                DB = { ...DB, ...imported };
+            }
+            saveDB();
+            renderTimeline();
+            renderStats();
+            buildSearchSelects();
+            loadEntryFromDB();
+            showToast(`✅ تم استيراد ${Object.keys(imported).length} شهر`);
+        } catch(err) {
+            console.error(err);
+            showToast('❌ فشل الاستيراد: ملف JSON غير صالح', 'error');
+        }
+        event.target.value = '';
+    };
+    reader.readAsText(file);
+}
+
+/* ============================================================
+   أدوات
+============================================================ */
+function switchTab(tabId, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('section-' + tabId).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleTheme() {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    document.getElementById('themeBtn').innerText = isDark ? '☀️' : '🌙';
+    localStorage.setItem('utilities_theme', isDark ? 'dark' : 'light');
+}
+
+function showToast(msg, type = '') {
+    const t = document.getElementById('toast');
+    t.innerText = msg;
+    t.className = 'toast show' + (type ? ' ' + type : '');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.className = 'toast', 2500);
+}
+
+function clearAll() {
+    if (!confirm('⚠️ هل أنت متأكد من مسح جميع البيانات؟ لا يمكن التراجع!')) return;
+    if (!confirm('🚨 تأكيد نهائي: سيتم حذف كل الشهور المسجلة.')) return;
+    DB = {};
+    saveDB();
+    renderTimeline();
+    renderStats();
+    buildSearchSelects();
+    showToast('🗑️ تم مسح جميع البيانات');
+}
+
+/* ============================================================
+   التهيئة
+============================================================ */
+window.onload = function() {
+    if (localStorage.getItem('utilities_theme') === 'dark') {
+        document.body.classList.add('dark');
+        document.getElementById('themeBtn').innerText = '☀️';
+    }
+    document.getElementById('year').innerText = new Date().getFullYear();
+
+    buildEntryUI();
+    refreshEntryMonthBadge();
+    loadDB();
+    loadEntryFromDB();
+    renderTimeline();
+    renderStats();
+    buildSearchSelects();
+
+    document.getElementById('imageModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+};
+</script>
+</body>
+</html>
